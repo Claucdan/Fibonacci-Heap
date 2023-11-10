@@ -28,6 +28,7 @@ protected:
 public:
     //Constructors
     FibonacciHeap();
+    FibonacciHeap(FibonacciHeap& heap);
     FibonacciHeap(FibonacciHeap& heap1,FibonacciHeap& heap2);
     //Destructors
     ~FibonacciHeap();
@@ -63,6 +64,22 @@ private:
 //Constructors and Destructors
 FibonacciHeap::FibonacciHeap(){
     heap=_empty();
+}
+FibonacciHeap::FibonacciHeap(FibonacciHeap& original) {
+    Node* start_of_layer_copy = nullptr;
+    if (original.heap) {
+        start_of_layer_copy=new Node;
+        //копируем начало кучи
+        start_of_layer_copy->value = original.heap->value;
+        start_of_layer_copy->degree = original.heap->degree;
+        start_of_layer_copy->marked = original.heap->marked;
+        //Из понимания
+        start_of_layer_copy->parent = NULL;
+        //Рекурсия в ход
+        start_of_layer_copy->child = copy_child(start_of_layer_copy, original.heap->child);
+        copy_next(original.heap, original.heap->next,start_of_layer_copy,start_of_layer_copy);
+    }
+    this->heap=start_of_layer_copy;
 }
 FibonacciHeap::FibonacciHeap(FibonacciHeap& heap1,FibonacciHeap& heap2){
     _copy(heap1.heap,heap2.heap);
