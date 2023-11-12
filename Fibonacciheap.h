@@ -22,6 +22,13 @@ private:
 protected:
     friend class FibonacciHeap;
 };
+
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
 class FibonacciHeap {
 protected:
     Node* heap;
@@ -46,6 +53,8 @@ public:
     void decreaseKey(Node* n,long value);
     //find element with that value, O(n)
     Node* find(long value);
+    //copy element of another_heap
+    Node* copy(FibonacciHeap& original_heap);
 private:
     Node* _empty();
     Node* _singleton(long value);
@@ -53,42 +62,40 @@ private:
     void _deleteAll(Node* n);
     void _addChild(Node* parent,Node* child);
     void _unMarkAndUnParentAll(Node* n);
-    Node* _removeMinimum(Node* n);
+    Node* _extractMin(Node* n);
     Node* _cut(Node* heap,Node* n);
     Node* _decreaseKey(Node* heap,Node* n,long value);
     Node* _find(Node* heap,long value);
-    void _copy(Node* first, Node* second);
-    Node* copy_child(Node* parent, Node* original_child);
-    void copy_next(Node* original_start_of_layer, Node* original_next_of_layer,Node* copy_start_of_layer, Node* copy_next_prev);
+    Node* _copy(FibonacciHeap& original_heap);
+    Node* _copy_child(Node* parent, Node* original_child);
+    void _copy_next(Node* original_start_of_layer, Node* original_next_of_layer,Node* copy_start_of_layer, Node* copy_next_prev);
 };
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 //Constructors and Destructors
 FibonacciHeap::FibonacciHeap(){
     heap=_empty();
 }
 FibonacciHeap::FibonacciHeap(FibonacciHeap& original) {
-    Node* start_of_layer_copy = nullptr;
-    if (original.heap) {
-        start_of_layer_copy=new Node;
-        //копируем начало кучи
-        start_of_layer_copy->value = original.heap->value;
-        start_of_layer_copy->degree = original.heap->degree;
-        start_of_layer_copy->marked = original.heap->marked;
-        //Из понимания
-        start_of_layer_copy->parent = NULL;
-        //Рекурсия в ход
-        start_of_layer_copy->child = copy_child(start_of_layer_copy, original.heap->child);
-        copy_next(original.heap, original.heap->next,start_of_layer_copy,start_of_layer_copy);
-    }
-    this->heap=start_of_layer_copy;
+    this->heap= _copy(original);
 }
 FibonacciHeap::FibonacciHeap(FibonacciHeap& heap1,FibonacciHeap& heap2){
-    _copy(heap1.heap,heap2.heap);
+    Node* first=_copy( heap1);
+    Node* second= _copy(heap2);
+    this->heap= _merge(first,second);
 }
 FibonacciHeap::~FibonacciHeap(){
     if(heap) {
         _deleteAll(heap);
     }
 }
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 //Method
 Node* FibonacciHeap::insert(long value) {
     Node* ret=_singleton(value);
@@ -108,7 +115,7 @@ long FibonacciHeap::getMinimum() {
 std::string FibonacciHeap::removeMinimum() {
     if(heap){
         Node* old=heap;
-        heap=_removeMinimum(heap);
+        heap=_extractMin(heap);
         long ret=old->value;
         delete old;
         return std::to_string(ret);
@@ -119,9 +126,23 @@ void FibonacciHeap::decreaseKey(Node *n, long value){
     if(n!= nullptr)
         heap=_decreaseKey(heap,n,value);
 }
-Node *FibonacciHeap::find(long value) {
+Node* FibonacciHeap::find(long value) {
     return _find(heap,value);
 }
+Node* FibonacciHeap::copy(FibonacciHeap &original_heap) {
+
+}
+
+
+
+
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
 //Private Method
 Node *FibonacciHeap::_empty(){
     return NULL;
@@ -178,7 +199,7 @@ void FibonacciHeap::_unMarkAndUnParentAll(Node *n){
         c=c->next;
     }while(c!=n);
 }
-Node *FibonacciHeap::_removeMinimum(Node *n) {
+Node *FibonacciHeap::_extractMin(Node *n) {
     _unMarkAndUnParentAll(n->child);
     if(n->next==n) {
         n=n->child;
@@ -188,7 +209,7 @@ Node *FibonacciHeap::_removeMinimum(Node *n) {
         n=_merge(n->next,n->child);
     }
     if(n==NULL)return n;
-    Node* trees[30]={NULL};
+    Node* trees[64]={NULL};
 
     while(true) {
         if(trees[n->degree]!=NULL) {
@@ -275,40 +296,24 @@ Node *FibonacciHeap::_find(Node *heap, long value){
     }while(n!=heap);
     return NULL;
 }
-void FibonacciHeap::_copy(Node *first, Node *second){
-    Node* start_of_layer_copy_of_first = nullptr;
-
-    if (first) {
-        start_of_layer_copy_of_first=new Node;
+Node* FibonacciHeap::_copy(FibonacciHeap& original_heap){
+    Node* copy_of_heap = nullptr;
+    if (original_heap.heap) {
+        copy_of_heap=new Node;
         //копируем начало кучи
-        start_of_layer_copy_of_first->value = first->value;
-        start_of_layer_copy_of_first->degree = first->degree;
-        start_of_layer_copy_of_first->marked = first->marked;
+        copy_of_heap->value = original_heap.heap->value;
+        copy_of_heap->degree = original_heap.heap->degree;
+        copy_of_heap->marked = original_heap.heap->marked;
         //Из понимания
-        start_of_layer_copy_of_first->parent = NULL;
+        copy_of_heap->parent = NULL;
         //Рекурсия в ход
-        start_of_layer_copy_of_first->child = copy_child(start_of_layer_copy_of_first, first->child);
-        copy_next(first, first->next,start_of_layer_copy_of_first,start_of_layer_copy_of_first);
+        copy_of_heap->child = _copy_child(copy_of_heap, original_heap.heap->child);
+        _copy_next(original_heap.heap, original_heap.heap->next,copy_of_heap,copy_of_heap);
 
     }
-    Node* start_of_layer_copy_of_second = nullptr;
-    if (second) {
-        start_of_layer_copy_of_second=new Node;
-        //копируем начало кучи
-        start_of_layer_copy_of_second->value = second->value;
-        start_of_layer_copy_of_second->degree = second->degree;
-        start_of_layer_copy_of_second->marked = second->marked;
-        //Из понимания
-        start_of_layer_copy_of_second->parent = NULL;
-        //Рекурсия в ход
-        start_of_layer_copy_of_second->child = copy_child(start_of_layer_copy_of_second, second->child);
-        copy_next(second,second->next,start_of_layer_copy_of_second,start_of_layer_copy_of_second);
-
-    }
-
-    this->heap = _merge(start_of_layer_copy_of_first, start_of_layer_copy_of_second);
+    return copy_of_heap;
 }
-Node *FibonacciHeap::copy_child(Node *parent, Node *original_child){
+Node *FibonacciHeap::_copy_child(Node *parent, Node *original_child){
     if (original_child== nullptr)
         return nullptr;
 
@@ -318,13 +323,13 @@ Node *FibonacciHeap::copy_child(Node *parent, Node *original_child){
     new_child->marked = original_child->marked;
     new_child->parent = parent; // Устанавливаем родителя нового узла
     // Копируем первого ребенка
-    new_child->child = copy_child(new_child, original_child->child);
+    new_child->child = _copy_child(new_child, original_child->child);
     // Копируем следующие узлы на этом же уровне
-    copy_next(original_child,original_child->next,new_child,new_child);
+    _copy_next(original_child,original_child->next,new_child,new_child);
 
     return new_child;
 }
-void FibonacciHeap::copy_next(Node *original_start_of_layer, Node *original_next_of_layer, Node *copy_start_of_layer,Node *copy_next_prev){
+void FibonacciHeap::_copy_next(Node *original_start_of_layer, Node *original_next_of_layer, Node *copy_start_of_layer,Node *copy_next_prev){
     if(original_start_of_layer==original_next_of_layer){
         copy_next_prev->next=copy_start_of_layer;
         copy_start_of_layer->prev=copy_next_prev;
@@ -341,8 +346,8 @@ void FibonacciHeap::copy_next(Node *original_start_of_layer, Node *original_next
     new_next->prev=copy_next_prev;
     copy_next_prev->next=new_next;
     //рекурсия
-    new_next->child= copy_child(new_next, original_next_of_layer->child);
-    copy_next(original_start_of_layer,original_next_of_layer->next,copy_start_of_layer,new_next);
+    new_next->child= _copy_child(new_next, original_next_of_layer->child);
+    _copy_next(original_start_of_layer,original_next_of_layer->next,copy_start_of_layer,new_next);
 }
 
 
