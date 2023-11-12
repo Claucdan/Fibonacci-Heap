@@ -1,4 +1,4 @@
-#Fibonacci Heap
+# Fibonacci Heap
 <div id="badges">
  <img src=https://img.shields.io/badge/CLion-grey?style=for-the-badge&logo=clion&logoColor=white></img>
  <img src=https://img.shields.io/badge/CMake-orange?style=for-the-badge&logo=cmake&logoColor=white></img>
@@ -9,15 +9,16 @@
 
 
 
-##Some information
+## Some information
 ---
+<div>
 Fibonacci Heaps were introduced in Fibonacci heaps and their uses in improved network optimization algorithms by Fredman and Tarjan in 1987.
 
 This C++ implementation was based on lectures by ITMO and MIPT teachers such as Pavel Mavrin and Ilya Stepanov.
+</div>
 
 
-
-##Usage
+##  Usage
 ---
 The Fibonacci Heap is implemented in the FibonacciHeap.hpp header file. It is templated on the type of the elements it stores. The Fibonacci Heap is a min-heap, i.e. the element with the smallest key is always at the top. This implementation supports the following operations:
 
