@@ -18,12 +18,12 @@ jobs:
         git clone https://github.com/google/googletest ${{github.workspace}}/Actions/my_project/googletest
 
     - name: Configure CMake
-      run:  cmake -S . -B ${{github.workspace}}/Actions/build
+      run:  cmake -S . -B ${{github.workspace}}/Actions
 
     - name: Build
       # Build your program with the given configuration
       run:  cmake --build ${{github.workspace}}/Actions/build -j 12
 
     - name: Test
-      run:  ctest --test-dir ${{github.workspace}}/Actions --output-on-failure -j12
+      run:  ctest --test-dir ${{github.workspace}} --output-on-failure -j12
 
