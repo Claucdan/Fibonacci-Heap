@@ -25,7 +25,7 @@ The Fibonacci Heap is implemented in the FibonacciHeap.hpp header file. It is te
 * `insert(key)`: Inserts a new element with the given key into the heap.
 * `merge(other_heap)`: Unites the heap with the given heap. The other heap is empty afterwards.
 * `getMin()`: Returns the smallest key in the heap.
-* `extractMinшьгь()`: Returns the smallest key in the heap and removes it from the heap.
+* `extractMinimum()`: Returns the smallest key in the heap and removes it from the heap.
 * `decreaseKey(element, new_key)`: Decreases the key of the given element to the new key. The new key - must be smaller than the old key.
 * `deleteElement(element)`: Deletes the given element from the heap.
 * `isEmpty()`: Returns whether the heap is empty.
