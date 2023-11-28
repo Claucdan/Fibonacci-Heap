@@ -9,7 +9,9 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Clone test
-      run: git clone https://github.com/Claucdan/Actions
+      run: |
+        git clone https://github.com/Claucdan/Actions
+        cp ${{github.workspace}}/Fibonacciheap.h ${{github.workspace}}/Actions/my_project/Fibonacciheap.h 
 
     - name: Clone googletest
       run: | 
