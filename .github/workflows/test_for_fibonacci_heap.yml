@@ -13,7 +13,7 @@ jobs:
 
     - name: Clone googletest
       run: | 
-        git clone https://github.com/google/googletest ${{github.workspace}}
+        git clone https://github.com/google/googletest ${{github.workspace}}/Actions
         git clone https://github.com/google/googletest ${{github.workspace}}/Actions/external/googletest
         git clone https://github.com/google/googletest ${{github.workspace}}/Actions/my_project/googletest
 
