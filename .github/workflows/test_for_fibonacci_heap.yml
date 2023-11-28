@@ -19,7 +19,7 @@ jobs:
 
     - name: Configure CMake
       run: |
-        cd   {{github.workspace}}/Actions
+        cd   ${{github.workspace}}/Actions
         cmake -S . -B ${{github.workspace}}/Actions
 
     - name: Build
