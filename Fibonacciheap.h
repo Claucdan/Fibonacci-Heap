@@ -53,8 +53,6 @@ public:
     void decreaseKey(Node* n,long value);
     //find element with that value, O(n)
     Node* find(long value);
-    //copy element of another_heap
-    Node* copy(FibonacciHeap& original_heap);
 private:
     Node* _empty();
     Node* _singleton(long value);
@@ -128,9 +126,6 @@ void FibonacciHeap::decreaseKey(Node *n, long value){
 }
 Node* FibonacciHeap::find(long value) {
     return _find(heap,value);
-}
-Node* FibonacciHeap::copy(FibonacciHeap &original_heap) {
-
 }
 
 
