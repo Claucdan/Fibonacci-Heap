@@ -1,0 +1,29 @@
+name: Testing
+run-name: ${{ github.actor }} push in github some new
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Clone test
+      run: git clone https://github.com/Claucdan/Actions
+
+    - name: Clone googletest
+      run: | 
+        git clone https://github.com/google/googletest ${{github.workspace}}
+        git clone https://github.com/google/googletest ${{github.workspace}}/Actions/external/googletest
+        git clone https://github.com/google/googletest ${{github.workspace}}/Actions/my_project/googletest
+
+    - name: Configure CMake
+      run:  cmake -S . -B ${{github.workspace}}/Actions
+
+    - name: Build
+      # Build your program with the given configuration
+      run:  cmake --build ${{github.workspace}}/Actions -j 12
+
+    - name: Test
+      run:  ctest --test-dir ${{github.workspace}}/Actions --output-on-failure -j12
+

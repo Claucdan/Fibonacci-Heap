@@ -1,11 +1,4 @@
 # ninja log v5
-0	738	7213574486677001	CMakeFiles/Fibonacciheap.dir/main.cpp.obj	e1ff8b2877c33328
-740	972	7213574488933552	Fibonacciheap.exe	c65367be5c94f63a
-4	597	7213575176140308	CMakeFiles/Fibonacciheap.dir/main.cpp.obj	e1ff8b2877c33328
-597	684	7213575176976814	Fibonacciheap.exe	c65367be5c94f63a
-3	520	7213575554005740	CMakeFiles/Fibonacciheap.dir/main.cpp.obj	e1ff8b2877c33328
-521	614	7213575554879049	Fibonacciheap.exe	c65367be5c94f63a
-5	509	7213575795621720	CMakeFiles/Fibonacciheap.dir/main.cpp.obj	e1ff8b2877c33328
-510	593	7213575796463697	Fibonacciheap.exe	c65367be5c94f63a
-2	525	7213576129663917	CMakeFiles/Fibonacciheap.dir/main.cpp.obj	e1ff8b2877c33328
-527	616	7213576130565723	Fibonacciheap.exe	c65367be5c94f63a
+0	1139	7217514398093116	CMakeFiles/Fibonacciheap.dir/main.cpp.obj	e1ff8b2877c33328
+1	138	7217586417848263	build.ninja	cde0d714ae7360e8
+1139	1295	7217514399634320	Fibonacciheap.exe	c65367be5c94f63a
